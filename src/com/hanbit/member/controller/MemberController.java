@@ -1,6 +1,8 @@
 package com.hanbit.member.controller;
 
 import javax.swing.JOptionPane;
+
+import com.hanbit.member.constants.Butt;
 import com.hanbit.member.domain.MemberBean;
 import com.hanbit.member.service.MemberService;
 import com.hanbit.member.serviceImpl.MemberServiceImpl;
@@ -9,12 +11,21 @@ public class MemberController {
 	public static void main(String[] args) {
 		MemberBean member=null;
 		MemberService service=new MemberServiceImpl();
-		while(true){
-			
-			switch (JOptionPane.showInputDialog("0.종료 1.회원추가 2.회원수보기 3.회원목록보기 4.검색 by ID 5.검색 by NAME 6.비밀번호변경 7.회원탈퇴")) {
-			case "0" :
+		Butt[] buttons={Butt.EXIT,Butt.ADD,Butt.LIST,Butt.FIND_NAME,Butt.FIND_ID,Butt.COUNT,Butt.UPDATE,Butt.DEL};
+		do{
+			flag:
+			switch ((Butt)JOptionPane.showInputDialog(
+					null,//frame
+					"MEMBER ADMIN",//frame title
+					"SELECT MENU",//order
+					JOptionPane.QUESTION_MESSAGE,//type
+					null,//icon
+					buttons,//Array of choices
+					buttons[1]//default
+					)) {
+			case EXIT :
 				return;
-			case "1":
+			case ADD:
 				member=new MemberBean();
 				String[] foo=JOptionPane.showInputDialog("ID/PW/SSN/NAME").split("/");
 				member.setId(foo[0]);
@@ -23,31 +34,33 @@ public class MemberController {
 				member.setName(foo[3]);
 				service.addMember(member);
 				JOptionPane.showMessageDialog(null, "회원가입 성공");
-				break;
-			case "2":
+				break flag;
+			case COUNT:
 				JOptionPane.showMessageDialog(null, service.countMembers()+"명");
-				break;
-			case "3":
+				break flag;
+			case LIST:
 				JOptionPane.showMessageDialog(null, service.getMembers());
-				break;
-			case "4":
+				break flag;
+			case FIND_ID:
 				JOptionPane.showMessageDialog(null, service.memberById(JOptionPane.showInputDialog("검색하고자 하는 id를 입력해주세요")));
-				break;
-			case "5":
+				break flag;
+			case FIND_NAME:
 				JOptionPane.showMessageDialog(null, service.getMemberByName(JOptionPane.showInputDialog("검색하고자 하는 이름을 입력해주세요")));
-				break;
-			case "6":
+				break flag;
+			case UPDATE:
 				member=new MemberBean();
 				member.setId(JOptionPane.showInputDialog("비번 바꾸려는 아이디를 입력해주세요"));
+				member.setName(JOptionPane.showInputDialog("새로운 이름을 입력해주세요"));
 				member.setPw(JOptionPane.showInputDialog("새로운 비밀번호를 입력해주세요"));
-				service.updataPw(member);
+				member.setSsn(JOptionPane.showInputDialog("새로운 주민번호를 입력해주세요"));
+				service.update(member);
 				JOptionPane.showMessageDialog(null, "업데이트완료");
-				break;
-			case "7":
+				break flag;
+			case DEL:
 				service.delete(JOptionPane.showInputDialog("탈퇴하고자 하는 아이디를 입력해주세요"));
 				JOptionPane.showMessageDialog(null, "탈퇴완료");
-				break;
+				break flag;
 			}
-		}
+		}while(true);
 	}
 }
