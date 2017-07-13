@@ -53,11 +53,11 @@ public class MemberController {
 				member.setName(JOptionPane.showInputDialog("새로운 이름을 입력해주세요"));
 				member.setPw(JOptionPane.showInputDialog("새로운 비밀번호를 입력해주세요"));
 				member.setSsn(JOptionPane.showInputDialog("새로운 주민번호를 입력해주세요"));
-				service.update(member);
+				service.modify(member);
 				JOptionPane.showMessageDialog(null, "업데이트완료");
 				break flag;
 			case DEL:
-				service.delete(JOptionPane.showInputDialog("탈퇴하고자 하는 아이디를 입력해주세요"));
+				service.remove(JOptionPane.showInputDialog("탈퇴하고자 하는 아이디를 입력해주세요"));
 				JOptionPane.showMessageDialog(null, "탈퇴완료");
 				break flag;
 			}

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.hanbit.member.dao.MemberDao;
+import com.hanbit.member.daoImpl.MemberDaoImpl;
 import com.hanbit.member.domain.MemberBean;
 import com.hanbit.member.service.MemberService;
 
@@ -14,53 +16,45 @@ public class MemberServiceImpl implements MemberService{
 	Map<String,MemberBean> members;
 	Map<String,MemberBean> memberByName;
 	List<MemberBean> list;
-
+	MemberDao dao;
 	public MemberServiceImpl() {
 		member=new MemberBean();
 		members=new HashMap<>();
 		memberByName=new HashMap<>();
 		list=new ArrayList<>();
+		dao=new MemberDaoImpl();
 	}
 	@Override
 	public void addMember(MemberBean member) {
-		members.put(member.getId(), member);
+		dao.insert(member);
 	}
 	@Override
 	public List<MemberBean> getMembers() {
 		list=new ArrayList<>();
-		Set<String> keys=members.keySet();
-		for(String s:keys){
-			list.add(members.get(s));
-		}
+		list=dao.selectAll();
 		return list;
 	}
 	@Override
 	public int countMembers() {
-		return members.size();
+		MemberDao dao=new MemberDaoImpl();
+		int count=0;
+		count=dao.count();
+		return count;
 	}
 	@Override
 	public MemberBean memberById(String id) {
-		member=new MemberBean();
-		member=members.get(id);
+		MemberDao dao=new MemberDaoImpl();
+		MemberBean member=dao.selectById(id);
 		return member;
 	}
 	@Override
 	public List<MemberBean> getMemberByName(String name) {
 		list=new ArrayList<>();
-		List<MemberBean> temp=new ArrayList<>();
-		Set<String> keys=members.keySet();
-		for(String s:keys){
-			temp.add(members.get(s));
-		}
-		for(MemberBean m:temp){
-			if(name.equals(m.getName())){
-				list.add(m);
-			}
-		}
+		list=dao.selectByName(name);
 		return list;
 	}
 	@Override
-	public void update(MemberBean param) {
+	public void modify(MemberBean param) {
 		member=new MemberBean();
 		member=members.get(param.getId());
 		if(param.getName().equals("")){
@@ -72,12 +66,11 @@ public class MemberServiceImpl implements MemberService{
 		if(param.getSsn().equals("")){
 			param.setSsn(member.getSsn());
 		}
-		members.remove(member);
-		members.put(param.getId(), param);
+		dao.update(param);
 	}
 	@Override
-	public void delete(String id) {
-		members.remove(id);
+	public void remove(String id) {
+		dao.delete(id);
 	}
 	
 	

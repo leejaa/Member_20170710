@@ -1,7 +1,13 @@
 package com.hanbit.member.domain;
 
 public class MemberBean {
-	String id,pw,ssn,name;
+	String id,pw,ssn,name,regdate;
+	public String getRegdate() {
+		return regdate;
+	}
+	public void setRegdate(String regdate) {
+		this.regdate = regdate;
+	}
 	public void setId(String id){
 		this.id=id;
 	}
@@ -27,6 +33,6 @@ public class MemberBean {
 		return name;
 	}
 	public String toString(){
-		return String.format("ID : %s, PW : %s\n, NAME : %s", id,pw,name);
+		return String.format("ID : %s, PW : %s, NAME : %s SSN : %s , REGDATE : %s \n ", id,pw,name,ssn,regdate);
 	}
 }
